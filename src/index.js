@@ -7,8 +7,8 @@ import VideoDetail from './components/video_detail';
 
 const API_KEY = 'AIzaSyCeFsbPfSx5sJG2kuwiyqhWyzOSHJVRJps';
 
-
 //Create a new component (class based component). This component is gonna produce some HTML
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -18,31 +18,33 @@ class App extends Component {
             selectedVideo: null
         };
 
-        YTSearch({key: API_KEY, term: 'Filthy Frank'}, (videos) => {
+        this.videoSearch('Filthy Frank');
+    }
+
+    videoSearch(term) {
+        YTSearch({key: API_KEY, term: term}, (videos) => {
             this.setState({
                 videos: videos,
                 selectedVideo: videos[0]
             });
-            //this.setState({videos: videos});
         });
-
     }
 
     render() {
         return (
             <div>
-                <SearchBar/>
+                <SearchBar onSearchTermChange={term=>this.videoSearch(term)}/>
                 <VideoDetail video={this.state.selectedVideo}/>
                 <VideoList
                     onVideoSelect={selectedVideo => this.setState({selectedVideo})}
-                    videos={this.state.videos}/>{/*this.state.vides is passed to the VideoList component */}
+                    videos={this.state.videos}/>{/*this.state.videos is passed to the VideoList component */}
             </div>
         );
     }
-};
+}
 
 //Take this components generated HTML and put it on the page (in the DOM)
 
-var $container = document.querySelector('.container');
+const $container = document.querySelector('.container');
 
 ReactDOM.render(<App/>, $container);
